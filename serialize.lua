@@ -97,7 +97,7 @@ function schematic_save.serialize(pos1, pos2)
 	end
 
 	local out = dump(schem)
-	out = "local schem = " .. string.sub(out, 1, string.len(out) - 1)
+	out = "return " .. string.sub(out, 1, string.len(out) - 1)
 	out = out .. ",\n\tdata = {\n" .. sdata2 .. "\n}\n}\n"
 	out = snode .. "\n" .. out
 	print(out)

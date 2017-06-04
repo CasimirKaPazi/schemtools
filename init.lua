@@ -42,7 +42,7 @@ minetest.register_chatcommand("stmark", {
 	end,
 })
 
-minetest.register_chatcommand("stpos1", {
+minetest.register_chatcommand("stp1", {
 	params = "",
 	description = "Set Schematic region position 1 to the player's location",
 	--privs = {schematic_save=true},
@@ -55,7 +55,7 @@ minetest.register_chatcommand("stpos1", {
 	end,
 })
 
-minetest.register_chatcommand("stpos2", {
+minetest.register_chatcommand("stp2", {
 	params = "",
 	description = "Set Schematic region position 2 to the player's location",
 	--privs = {schematic_save=true},
@@ -123,7 +123,7 @@ end)
 
 minetest.register_chatcommand("stsave", {
 	params = "<file>",
-	description = "Save the current Schematic region to \"schemtools/schems/<file>.lua\"",
+	description = "Save the current Schematic region to \"(worldpath)/<file>.lua\"",
 	--privs = {schematic_save=true},
 	func = function(name, param)
 		local pos1, pos2 = schematic_save.pos1[name], schematic_save.pos2[name]
@@ -139,9 +139,8 @@ minetest.register_chatcommand("stsave", {
 
 		local result, count = schematic_save.serialize(pos1, pos2)
 
-		--local path = minetest.get_worldpath() .. "/schems"
-		local filename = schematic_save.path .. "/schems/" .. param .. ".lua"
-		--os.execute("mkdir \"" .. path .. "\"") --create directory if it does not already exist
+		local path = minetest.get_worldpath()
+		local filename = path .. "/" .. param .. ".lua"
 		local file, err = io.open(filename, "w")
 		if err ~= nil then
 			minetest.chat_send_player(name, "Could not save file to \"" .. filename .. "\"", false)
@@ -152,5 +151,36 @@ minetest.register_chatcommand("stsave", {
 		file:close()
 
 		minetest.chat_send_player(name, count .. " nodes saved", false)
+	end,
+})
+
+minetest.register_chatcommand("lua2mts", {
+	params = "<file>",
+	description = "Save the current Schematic region to \"(worldpath)/<file>.lua\"",
+	--privs = {schematic_save=true},
+	func = function(name, param)
+		if param == "" then
+			minetest.chat_send_player(name, "Invalid usage: " .. param, false)
+			return
+		end
+		local path = minetest.get_worldpath()
+		local filename = path .. "/" .. param
+		local filename_lua = filename .. ".lua"
+		if not io.open(filename_lua) then
+			minetest.chat_send_player(name, param..".lua does not exist.", false)
+			return
+		end
+		local data = dofile(filename_lua)
+		if not data then minetest.chat_send_player(name, "No data found", false) return end
+		local serialized = minetest.serialize_schematic(data, "mts", {})
+		local filename_mts = filename .. ".mts"
+		filename = filename:gsub("\"", "\\\""):gsub("\\", "\\\\")
+		local file, err = io.open(filename_mts, "wb")
+		if err == nil then
+			file:write(serialized)
+			file:flush()
+			file:close()
+			minetest.chat_send_player(name, param..".mts has been created at "..filename_mts , false)
+		end
 	end,
 })
