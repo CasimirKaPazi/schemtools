@@ -67,7 +67,7 @@ function schematic_save.serialize(pos1, pos2)
 
 	local sdata2 = ""
 	while string.len(sdata) > 0 do
-		local s = string.sub(sdata, 1, 70)
+		local s = string.sub(sdata, 1, width*4) -- length of "n1, " is 4
 		local i = string.match(s, "^.*() ")
 		if i then
 			sdata2 = sdata2 .. string.sub(sdata, 1, i) .. "\n"
