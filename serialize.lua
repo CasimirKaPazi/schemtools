@@ -66,12 +66,19 @@ function schematic_save.serialize(pos1, pos2)
 	end
 
 	local sdata2 = ""
+	local newline = 0
 	while string.len(sdata) > 0 do
 		local s = string.sub(sdata, 1, width*4) -- length of "n1, " is 4
 		local i = string.match(s, "^.*() ")
 		if i then
 			sdata2 = sdata2 .. string.sub(sdata, 1, i) .. "\n"
 			sdata = string.sub(sdata, i + 1)
+			-- Add an empty line every hight
+			newline = newline + 1
+			if newline == height and string.len(sdata) >= width*4 then
+				sdata2 = sdata2 .. "\n"
+				newline = 0
+			end
 		else
 			sdata2 = sdata2 .. sdata .. "\n"
 			sdata = ""
