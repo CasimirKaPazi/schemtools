@@ -31,7 +31,7 @@ schematic_save.player_axis = function(name)
 	return "z", dir.z > 0 and 1 or -1
 end
 
-minetest.register_chatcommand("/mark", {
+minetest.register_chatcommand("stmark", {
 	params = "",
 	description = "Show markers at the region positions",
 	--privs = {schematic_save=true},
@@ -42,7 +42,7 @@ minetest.register_chatcommand("/mark", {
 	end,
 })
 
-minetest.register_chatcommand("/pos1", {
+minetest.register_chatcommand("stpos1", {
 	params = "",
 	description = "Set Schematic region position 1 to the player's location",
 	--privs = {schematic_save=true},
@@ -55,7 +55,7 @@ minetest.register_chatcommand("/pos1", {
 	end,
 })
 
-minetest.register_chatcommand("/pos2", {
+minetest.register_chatcommand("stpos2", {
 	params = "",
 	description = "Set Schematic region position 2 to the player's location",
 	--privs = {schematic_save=true},
@@ -68,7 +68,7 @@ minetest.register_chatcommand("/pos2", {
 	end,
 })
 
-minetest.register_chatcommand("/p", {
+minetest.register_chatcommand("stp", {
 	params = "set/set1/set2/get",
 	description = "Set Schematic region, Schematic position 1, or Schematic position 2 by punching nodes, or display the current Schematic region",
 	--privs = {schematic_save=true},
@@ -121,7 +121,7 @@ minetest.register_on_punchnode(function(pos, node, puncher)
 	end
 end)
 
-minetest.register_chatcommand("/save", {
+minetest.register_chatcommand("stsave", {
 	params = "<file>",
 	description = "Save the current Schematic region to \"schemtools/schems/<file>.lua\"",
 	--privs = {schematic_save=true},
