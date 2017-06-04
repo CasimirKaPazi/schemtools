@@ -123,7 +123,7 @@ end)
 
 minetest.register_chatcommand("/save", {
 	params = "<file>",
-	description = "Save the current Schematic region to \"(world folder)/schems/<file>.we\"",
+	description = "Save the current Schematic region to \"schemtools/schems/<file>.lua\"",
 	--privs = {schematic_save=true},
 	func = function(name, param)
 		local pos1, pos2 = schematic_save.pos1[name], schematic_save.pos2[name]
@@ -140,8 +140,7 @@ minetest.register_chatcommand("/save", {
 		local result, count = schematic_save.serialize(pos1, pos2)
 
 		--local path = minetest.get_worldpath() .. "/schems"
-		local path = minetest.get_worldpath()
-		local filename = path .. "/" .. param .. ".txt"
+		local filename = schematic_save.path .. "/schems/" .. param .. ".lua"
 		--os.execute("mkdir \"" .. path .. "\"") --create directory if it does not already exist
 		local file, err = io.open(filename, "w")
 		if err ~= nil then
